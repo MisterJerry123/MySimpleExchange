@@ -1,4 +1,4 @@
-import { Currency } from "../../domain/model/Currency";
+import { Currency } from "../../domain/model/currency";
 
 
 export interface MainState {

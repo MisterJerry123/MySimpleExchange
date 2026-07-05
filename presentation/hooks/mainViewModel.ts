@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Currency } from "../../domain/model/Currency";
 import { initialState, MainState } from "./mainState";
+import { Currency } from "../../domain/model/currency";
 
 export function useCurrencyViewModel() {
 

@@ -1,5 +1,5 @@
 export interface Currency {
     code: string;
-    price: String;
+    price: string;
     rate: number;
 }
