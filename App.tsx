@@ -5,7 +5,7 @@ import { useCurrencyViewModel } from './presentation/hooks/useCurrencyViewModel'
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, swapCurrencies } = useCurrencyViewModel();
 
   return (
     <View style={styles.container}>
@@ -34,11 +34,12 @@ export default function App() {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.touchButton}>
+          <TouchableOpacity style={styles.touchButton} onPress={swapCurrencies}>
             <Image
               source={require('./assets/changeIcon.png')}
               style={styles.changeIcon}
             />
+            
           </TouchableOpacity>
         </View>
         <View style={styles.endPart}>
