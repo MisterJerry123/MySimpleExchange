@@ -8,15 +8,34 @@ export function useCurrencyViewModel() {
 
 
     const selectFromCurrency = (currency: Currency) => {
+        console.log("selectFromCurrency1", currency);
+
         setState(prevState => ({
             ...prevState,
-            fromCurrency: currency
+            fromCurrency: currency,
+            toCurrency: {
+                ...prevState.toCurrency,
+                price: (parseFloat(currency.price) * (prevState.toCurrency.rate / currency.rate))
+                    .toLocaleString('ko-KR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })
+            },
+
         }));
+
     }
     const selectToCurrency = (currency: Currency) => {
         setState(prevState => ({
             ...prevState,
-            toCurrency: currency
+            toCurrency: currency,
+            fromCurrency: {
+                ...prevState.fromCurrency,
+                price: (parseFloat(currency.price) * (prevState.fromCurrency.rate) / currency.rate).toLocaleString('ko-KR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })
+            }
         }));
     }
 
@@ -30,12 +49,22 @@ export function useCurrencyViewModel() {
         }));
     };
 
+    // const changeFromPrice = (amount: string) => {
+    //     const { fromCurrency, toCurrency } = state;
+    //     const exchangeRate = toCurrency.rate / fromCurrency.rate;
+    //     setState(prevState => ({
+    //         ...prevState,
+    //         price: parseFloat(amount) * exchangeRate
+    //     }));
+    // }
+
     return {
         fromCurrency: state.fromCurrency,
         toCurrency: state.toCurrency,
         selectFromCurrency,
         selectToCurrency,
-        swapCurrencies
+        swapCurrencies,
+        //changeFromPrice
     };
 
 }
