@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { useCurrencyViewModel } from './presentation/hooks/useCurrencyViewModel';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, swapCurrencies } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies } = useCurrencyViewModel();
 
   return (
     <View style={styles.container}>
@@ -28,7 +28,14 @@ export default function App() {
         <View style={styles.startPart}>
           <Text style={styles.priceSelect}>보내는 금액</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>{fromCurrency.rate}</Text>
+            <TextInput style={styles.inputText} keyboardType="numeric" onChangeText={(text) => {
+              selectFromCurrency({
+                ...fromCurrency,
+                price: text
+              });
+            }}>
+              {fromCurrency.price}
+            </TextInput>
             <TouchableOpacity style={styles.currencySelect}>
               <Text>{fromCurrency.code}</Text>
             </TouchableOpacity>
@@ -45,7 +52,15 @@ export default function App() {
         <View style={styles.endPart}>
           <Text style={styles.priceSelect}> 받는 금액</Text>
           <View style={styles.inputContainer2}>
-            <Text style={styles.inputText2}>{toCurrency.rate}</Text>
+
+            <TextInput style={styles.inputText2} keyboardType="numeric" onChangeText={(text) => {
+              selectToCurrency({
+                ...toCurrency,
+                price: text
+              });
+            }}>
+              {toCurrency.price}
+            </TextInput>
             <TouchableOpacity style={styles.currencySelect}>
               <Text>{toCurrency.code}</Text>
             </TouchableOpacity>
