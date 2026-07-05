@@ -1,7 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useCurrencyViewModel } from './presentation/hooks/useCurrencyViewModel';
 
 export default function App() {
+
+  //viewmodel
+  const { fromCurrency, toCurrency, selectFromCurrency } = useCurrencyViewModel();
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -23,8 +28,9 @@ export default function App() {
         <View style={styles.startPart}>
           <Text style={styles.priceSelect}>보내는 금액</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>1350</Text>
+            <Text style={styles.inputText}>{fromCurrency.rate}</Text>
             <TouchableOpacity style={styles.currencySelect}>
+              <Text>{fromCurrency.code}</Text>
             </TouchableOpacity>
           </View>
 
@@ -38,9 +44,9 @@ export default function App() {
         <View style={styles.endPart}>
           <Text style={styles.priceSelect}> 받는 금액</Text>
           <View style={styles.inputContainer2}>
-            <Text style={styles.inputText2}>1</Text>
+            <Text style={styles.inputText2}>{toCurrency.rate}</Text>
             <TouchableOpacity style={styles.currencySelect}>
-
+              <Text>{toCurrency.code}</Text>
             </TouchableOpacity>
           </View>
         </View>
