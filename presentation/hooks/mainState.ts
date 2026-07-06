@@ -4,6 +4,8 @@ import { Currency } from "../../domain/model/currency";
 export interface MainState {
     fromCurrency: Currency;
     toCurrency: Currency;
+    isFromCurrencySelected?: boolean;
+    isToCurrencySelected?: boolean;
 }
 
 export const initialState: MainState = { //mock 데이터가 들어있음.
@@ -16,5 +18,7 @@ export const initialState: MainState = { //mock 데이터가 들어있음.
         code: "KRW",
         price: "1300.0",
         rate: 1752.95,
-    }
+    },
+    isFromCurrencySelected: false,
+    isToCurrencySelected: false,
 };

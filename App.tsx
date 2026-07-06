@@ -1,11 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList, Pressable } from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
+
+const currencies = [
+  { code: "USD", rate: 1.1415 },
+  { code: "EUR", rate: 1.0 },
+  { code: "KRW", rate: 1747.72 },
+  { code: "JPY", rate: 185.31 },
+
+];
+
+
 
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected } = useCurrencyViewModel();
+
+
 
   return (
     <View style={styles.container}>
@@ -36,17 +48,36 @@ export default function App() {
             }}>
               {fromCurrency.price}
             </TextInput>
-            <TouchableOpacity style={styles.currencySelect}>
+
+            <TouchableOpacity style={styles.currencySelect} onPress={() => {
+              openCurrencySelection(true);
+            }}>
               <Text>{fromCurrency.code}</Text>
             </TouchableOpacity>
+
+            {isFromCurrencySelected && (
+              <View style={styles.dropdownContainer}>
+
+                <FlatList data={currencies} renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => {
+                    selectFromCurrency({ ...fromCurrency, ...item });
+                    ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
+                    closeCurrencySelection(true);
+                  }}>
+                    <Text>{item.code}</Text>
+                  </TouchableOpacity>
+                )} />
+              </View>
+            )}
           </View>
+
 
           <TouchableOpacity style={styles.touchButton} onPress={swapCurrencies}>
             <Image
               source={require('./assets/changeIcon.png')}
               style={styles.changeIcon}
             />
-            
+
           </TouchableOpacity>
         </View>
         <View style={styles.endPart}>
@@ -61,7 +92,9 @@ export default function App() {
             }}>
               {toCurrency.price}
             </TextInput>
-            <TouchableOpacity style={styles.currencySelect}>
+            <TouchableOpacity style={styles.currencySelect} onPress={() => {
+              openCurrencySelection(false);
+            }}>
               <Text>{toCurrency.code}</Text>
             </TouchableOpacity>
           </View>
@@ -114,8 +147,6 @@ const styles = StyleSheet.create({
   changeIcon: {
     width: 20,
     height: 20,
-
-
   },
   textContainer: {
     flex: 1
@@ -179,15 +210,37 @@ const styles = StyleSheet.create({
     marginEnd: 7.99,
     width: 82.07,
     height: 37.53,
+    position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     marginStart: `auto`,
     borderWidth: 0.77,
     borderColor: '#E5E5E5',
-  }
-
-
-
-
+  },
+  dropdownContainer: {
+    position: 'absolute',
+    top: 42,
+    right: 7.99,
+    width: 82.07,
+    backgroundColor: '#fff',
+    borderWidth: 0.77,
+    borderColor: '#E5E5E5',
+    borderRadius: 12,
+    maxHeight: 160,
+    zIndex: 999,
+    elevation: 4,
+    overflow: 'hidden'
+  },
+  dropdownItem: {
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#F5F5F5',
+  },
+  dropdownText: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '500'
+  },
 });

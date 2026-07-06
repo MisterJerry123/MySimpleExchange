@@ -49,6 +49,34 @@ export function useCurrencyViewModel() {
         }));
     };
 
+    const openCurrencySelection = (isFromCurrency: boolean) => {
+        if (isFromCurrency) {
+            setState(prevState => ({
+                ...prevState,
+                isFromCurrencySelected: true
+            }));
+        } else {
+            setState(prevState => ({
+                ...prevState,
+                isToCurrencySelected: true
+            }));
+        }
+    };
+
+    const closeCurrencySelection = (isFromCurrency: boolean) => {
+        if (isFromCurrency) {
+            setState(prevState => ({
+                ...prevState,
+                isFromCurrencySelected: false
+            }));
+        } else {
+            setState(prevState => ({
+                ...prevState,
+                isToCurrencySelected: false
+            }));
+        }
+    };
+
     // const changeFromPrice = (amount: string) => {
     //     const { fromCurrency, toCurrency } = state;
     //     const exchangeRate = toCurrency.rate / fromCurrency.rate;
@@ -59,11 +87,14 @@ export function useCurrencyViewModel() {
     // }
 
     return {
-        fromCurrency: state.fromCurrency,
-        toCurrency: state.toCurrency,
+        ...state,
         selectFromCurrency,
         selectToCurrency,
         swapCurrencies,
+        openCurrencySelection,
+        closeCurrencySelection,
+
+         
         //changeFromPrice
     };
 
