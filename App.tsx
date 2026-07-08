@@ -187,7 +187,8 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 30,
     marginVertical: 8.76,
-    marginStart: 19.99
+    marginStart: 19.99,
+    flex:1
   },
   inputText2: {
     color: '#155DFC',
@@ -195,7 +196,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 8.76,
     marginStart: 19.99,
-    alignSelf: `stretch`
+    alignSelf: `stretch`,
+    flex:1
   },
   touchButton: {
     backgroundColor: '#155DFC',
