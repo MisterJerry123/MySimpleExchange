@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList} from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 
 const currencies = [
@@ -97,6 +97,21 @@ export default function App() {
             }}>
               <Text>{toCurrency.code}</Text>
             </TouchableOpacity>
+            
+            {isToCurrencySelected && (
+              <View style={styles.dropdownContainer}>
+
+                <FlatList data={currencies} renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => {
+                    selectToCurrency({ ...toCurrency, ...item });
+                    ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
+                    closeCurrencySelection(false);
+                  }}>
+                    <Text>{item.code}</Text>
+                  </TouchableOpacity>
+                )} />
+              </View>
+            )}
           </View>
         </View>
       </View>
