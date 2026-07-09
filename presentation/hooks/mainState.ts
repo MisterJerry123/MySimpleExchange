@@ -6,6 +6,7 @@ export interface MainState {
     toCurrency: Currency;
     isFromCurrencySelected?: boolean;
     isToCurrencySelected?: boolean;
+    currencies:Currency[]
 }
 
 export const initialState: MainState = { //mock 데이터가 들어있음.
@@ -21,4 +22,5 @@ export const initialState: MainState = { //mock 데이터가 들어있음.
     },
     isFromCurrencySelected: false,
     isToCurrencySelected: false,
+    currencies:[]
 };

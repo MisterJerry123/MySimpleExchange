@@ -2,22 +2,23 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList} from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 
-const currencies = [
-  { code: "USD", rate: 1.1415 },
-  { code: "EUR", rate: 1.0 },
-  { code: "KRW", rate: 1747.72 },
-  { code: "JPY", rate: 185.31 },
+// const currencies = [
+//   { code: "USD", rate: 1.1415 },
+//   { code: "EUR", rate: 1.0 },
+//   { code: "KRW", rate: 1747.72 },
+//   { code: "JPY", rate: 185.31 },
 
-];
+// ];
 
 
 
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies } = useCurrencyViewModel();
 
 
+          console.log("currency", currencies)
 
   return (
     <View style={styles.container}>

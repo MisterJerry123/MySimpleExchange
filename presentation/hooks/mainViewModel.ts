@@ -1,8 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { initialState, MainState } from "./mainState";
 import { Currency } from "../../domain/model/currency";
-
+import { MockExchangeDataSourceImpl } from "../../data/data_source/mockExchangeDataSourceImpl";
+import { ExchangeRepositoryImpl } from "../../data/repository/exchangeRepositoryImpl";
+const dataSource = new MockExchangeDataSourceImpl();
+const repository = new ExchangeRepositoryImpl(dataSource);
 export function useCurrencyViewModel() {
+
+    useEffect(() => {
+        const fetchCurrencies = async () => {
+            const result = await repository.getCurrencies()
+
+            setState(prevState => ({
+                ...prevState,
+                currencies:result
+            }))
+            console.log("mainviewmodel", result);
+
+        }
+        fetchCurrencies()
+
+    }, [])
 
     const [state, setState] = useState<MainState>(initialState);
 
@@ -32,9 +50,9 @@ export function useCurrencyViewModel() {
             fromCurrency: {
                 ...prevState.fromCurrency,
                 price: (parseFloat(currency.price) * (prevState.fromCurrency.rate) / currency.rate).toLocaleString('ko-KR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    })
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
             }
         }));
     }
@@ -94,7 +112,7 @@ export function useCurrencyViewModel() {
         openCurrencySelection,
         closeCurrencySelection,
 
-         
+
         //changeFromPrice
     };
 
