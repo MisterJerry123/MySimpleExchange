@@ -25,7 +25,8 @@
 - **양방향 변환** — 보내는 금액 입력 시 받는 금액 자동 계산, 반대도 동일
 - **금액 포맷팅** — 변환 결과를 소수점 2자리로 포맷팅 (toLocaleString)
 - **통화 스왑** — 보내는/받는 통화를 원형 버튼으로 즉시 교환
-- **통화 선택 영역** — 각 입력 필드에 통화 종류를 선택할 수 있는 셀렉터 배치
+- **통화 드롭다운 선택** — 보내는/받는 통화를 FlatList 기반 드롭다운에서 선택
+- **데이터 레이어 연동** — Repository 패턴으로 DataSource에서 통화 목록 로드
 - **카드형 레이아웃** — 라운드 카드 디자인으로 깔끔한 UI 구성
 - **헤더 카드** — 아이콘과 함께 앱 타이틀 및 설명을 표시하는 블루 컬러 헤더
 
@@ -36,11 +37,15 @@
 Clean Architecture 기반으로 **Domain / Data / Presentation** 레이어를 분리합니다.
 
 ```
-App.tsx (View) → mainViewModel (ViewModel/Hook) → MainState (UiState)
-                                                  → Currency (Domain Model)
+App.tsx (View) → mainViewModel (ViewModel/Hook) → Repository → DataSource
+                      ↕                               ↕
+               MainState (UiState)              Mapper (DTO → Domain)
+                      ↕
+               Currency (Domain Model)
 ```
 
-- **Domain** — 프레임워크 의존 없는 순수 TypeScript (모델, 유스케이스)
+- **Domain** — 프레임워크 의존 없는 순수 TypeScript (모델, Repository 인터페이스)
+- **Data** — Repository 구현체, DataSource, DTO, Mapper
 - **Presentation** — React Hook 기반 ViewModel + 상태 관리
 
 ---
@@ -52,12 +57,24 @@ SimpleExchange/
 ├── App.tsx                          # 메인 화면 (View)
 ├── index.ts                         # 앱 엔트리 포인트
 ├── domain/
-│   └── model/
-│       └── Currency.ts              # 통화 도메인 모델 (code, price, rate)
+│   ├── model/
+│   │   └── currency.ts              # 통화 도메인 모델 (code, price, rate)
+│   └── repository/
+│       └── exchangeRepository.ts    # Repository 인터페이스
+├── data/
+│   ├── data_source/
+│   │   ├── exchangeDataSource.ts    # DataSource 인터페이스
+│   │   └── mockExchangeDataSourceImpl.ts  # Mock DataSource 구현체
+│   ├── dto/
+│   │   └── exchangeInfoDto.ts       # 환율 API 응답 DTO
+│   ├── mapper/
+│   │   └── exchangeInfoMapper.ts    # DTO → Currency[] 변환
+│   └── repository/
+│       └── exchangeRepositoryImpl.ts # Repository 구현체
 ├── presentation/
 │   └── hooks/
 │       ├── mainState.ts             # MainState 인터페이스 + 초기값
-│       └── mainViewModel.ts         # ViewModel Hook (상태 관리 + 이벤트 처리)
+│       └── mainViewModel.ts         # ViewModel Hook (상태 관리 + 데이터 fetch)
 ├── assets/
 │   ├── icon.png                     # 앱 아이콘
 │   ├── splash-icon.png              # 스플래시 아이콘
