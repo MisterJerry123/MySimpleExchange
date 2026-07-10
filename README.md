@@ -46,14 +46,12 @@
 
 ---
 
-## 아키텍처
-
-Clean Architecture 기반으로 **Domain / Data / Presentation** 레이어를 분리합니다.
+Clean Architecture 기반으로 **Domain / Data / Presentation** 레이어를 분리하고 공통 모듈인 **Core**를 둡니다.
 
 ```
-App.tsx (View) → mainViewModel (ViewModel/Hook) → Repository → DataSource
-                      ↕                               ↕
-               MainState (UiState)              Mapper (DTO → Domain)
+App.tsx (View) ──(fromPrice, toPrice)──> mainViewModel (ViewModel/Hook) ──> Repository ──> DataSource
+                      ↕                                                         ↕
+               MainState (UiState)                                        Mapper (DTO → Domain)
                       ↕
                Currency (Domain Model)
 ```
@@ -61,6 +59,7 @@ App.tsx (View) → mainViewModel (ViewModel/Hook) → Repository → DataSource
 - **Domain** — 프레임워크 의존 없는 순수 TypeScript (모델, Repository 인터페이스)
 - **Data** — Repository 구현체, DataSource, DTO, Mapper
 - **Presentation** — React Hook 기반 ViewModel + 상태 관리
+- **Core** — 공통 상수(BASE_URL 등) 및 전역 모듈
 
 ---
 
@@ -70,9 +69,11 @@ App.tsx (View) → mainViewModel (ViewModel/Hook) → Repository → DataSource
 SimpleExchange/
 ├── App.tsx                          # 메인 화면 (View)
 ├── index.ts                         # 앱 엔트리 포인트
+├── core/
+│   └── constants.ts                 # 공통 상숫값 정의 (BASE_URL 등)
 ├── domain/
 │   ├── model/
-│   │   └── currency.ts              # 통화 도메인 모델 (code, price, rate)
+│   │   └── currency.ts              # 통화 도메인 모델 (code, rate)
 │   └── repository/
 │       └── exchangeRepository.ts    # Repository 인터페이스
 ├── data/
@@ -88,8 +89,8 @@ SimpleExchange/
 │       └── exchangeRepositoryImpl.ts # Repository 구현체
 ├── presentation/
 │   └── hooks/
-│       ├── mainState.ts             # MainState 인터페이스 + 초기값
-│       └── mainViewModel.ts         # ViewModel Hook (상태 관리 + 데이터 fetch)
+│       ├── mainState.ts             # MainState 인터페이스 + 초기값 (fromPrice, toPrice 포함)
+│       └── mainViewModel.ts         # ViewModel Hook (상태 관리 + 데이터 fetch + 입력 계산)
 ├── assets/
 │   ├── icon.png                     # 앱 아이콘
 │   ├── splash-icon.png              # 스플래시 아이콘
