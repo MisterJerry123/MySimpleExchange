@@ -18,7 +18,7 @@ export default function App() {
   const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies } = useCurrencyViewModel();
 
 
-          console.log("currency", currencies)
+  console.log("currency", currencies)
 
   return (
     <View style={styles.container}>

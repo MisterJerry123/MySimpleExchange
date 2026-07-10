@@ -3,7 +3,9 @@ import { initialState, MainState } from "./mainState";
 import { Currency } from "../../domain/model/currency";
 import { MockExchangeDataSourceImpl } from "../../data/data_source/mockExchangeDataSourceImpl";
 import { ExchangeRepositoryImpl } from "../../data/repository/exchangeRepositoryImpl";
-const dataSource = new MockExchangeDataSourceImpl();
+import { RemoteExchangeDataSourceImpl } from "../../data/data_source/remoteExchangeDataSourceImpl";
+//const dataSource = new MockExchangeDataSourceImpl();
+const dataSource = new RemoteExchangeDataSourceImpl()
 const repository = new ExchangeRepositoryImpl(dataSource);
 export function useCurrencyViewModel() {
 
