@@ -6,6 +6,19 @@
 
 ---
 
+## 📱 데모
+
+<div align="center">
+
+| 메인 화면 | 통화 선택 | 환율 변환 |
+|:---:|:---:|:---:|
+| <img src="./assets/screenshots/main.png" width="250" /> | <img src="./assets/screenshots/dropdown.png" width="250" /> | <img src="./assets/screenshots/convert.gif" width="230" /> |
+
+</div>
+
+
+---
+
 ## 기술 스택
 
 | 분류 | 기술 | 버전 |
