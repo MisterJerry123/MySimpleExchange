@@ -14,6 +14,7 @@
 | Platform | Expo | ~57.0.1 |
 | Language | TypeScript | ~6.0.3 |
 | UI Library | React | 19.2.3 |
+| HTTP Client | axios | ^1.18.1 |
 | Status Bar | expo-status-bar | ~57.0.0 |
 
 ---
@@ -26,7 +27,7 @@
 - **금액 포맷팅** — 변환 결과를 소수점 2자리로 포맷팅 (toLocaleString)
 - **통화 스왑** — 보내는/받는 통화를 원형 버튼으로 즉시 교환
 - **통화 드롭다운 선택** — 보내는/받는 통화를 FlatList 기반 드롭다운에서 선택
-- **데이터 레이어 연동** — Repository 패턴으로 DataSource에서 통화 목록 로드
+- **실시간 API 연동** — Frankfurter API에서 실시간 환율 데이터 조회 (axios)
 - **카드형 레이아웃** — 라운드 카드 디자인으로 깔끔한 UI 구성
 - **헤더 카드** — 아이콘과 함께 앱 타이틀 및 설명을 표시하는 블루 컬러 헤더
 
@@ -64,7 +65,8 @@ SimpleExchange/
 ├── data/
 │   ├── data_source/
 │   │   ├── exchangeDataSource.ts    # DataSource 인터페이스
-│   │   └── mockExchangeDataSourceImpl.ts  # Mock DataSource 구현체
+│   │   ├── mockExchangeDataSourceImpl.ts  # Mock DataSource 구현체
+│   │   └── remoteExchangeDataSourceImpl.ts # Remote DataSource (Frankfurter API)
 │   ├── dto/
 │   │   └── exchangeInfoDto.ts       # 환율 API 응답 DTO
 │   ├── mapper/
