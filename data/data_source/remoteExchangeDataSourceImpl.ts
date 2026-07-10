@@ -1,14 +1,14 @@
 import axios from "axios";
 import { ExchangeInfoDto } from "../dto/exchangeInfoDto";
 import { ExchangeDataSource } from "./exchangeDataSource";
+import { BASE_URL } from "../../core/constants";
 
 export class RemoteExchangeDataSourceImpl implements ExchangeDataSource {
-    private baseUrl = "https://api.frankfurter.dev/v1/latest"
 
     async getAllExchangeInfos(): Promise<ExchangeInfoDto> {
 
         try {
-            const response = await axios.get<ExchangeInfoDto>(this.baseUrl)
+            const response = await axios.get<ExchangeInfoDto>(BASE_URL)
             return response.data
         }
         catch (error) {
