@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList } from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 
 // const currencies = [
@@ -15,7 +15,7 @@ import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies, changeFromPrice, changeToPrice,toPrice,fromPrice } = useCurrencyViewModel();
 
 
   console.log("currency", currencies)
@@ -41,13 +41,9 @@ export default function App() {
         <View style={styles.startPart}>
           <Text style={styles.priceSelect}>보내는 금액</Text>
           <View style={styles.inputContainer}>
-            <TextInput style={styles.inputText} keyboardType="numeric" onChangeText={(text) => {
-              selectFromCurrency({
-                ...fromCurrency,
-                price: text
-              });
+            <TextInput style={styles.inputText} keyboardType="numeric" value={fromPrice} onChangeText={(text) => {
+              changeFromPrice(text);
             }}>
-              {fromCurrency.price}
             </TextInput>
 
             <TouchableOpacity style={styles.currencySelect} onPress={() => {
@@ -85,20 +81,18 @@ export default function App() {
           <Text style={styles.priceSelect}> 받는 금액</Text>
           <View style={styles.inputContainer2}>
 
-            <TextInput style={styles.inputText2} keyboardType="numeric" onChangeText={(text) => {
-              selectToCurrency({
-                ...toCurrency,
-                price: text
-              });
+            <TextInput style={styles.inputText2} keyboardType="numeric" value={toPrice} onChangeText={(text) => {
+              changeToPrice(text) ;
             }}>
-              {toCurrency.price}
+              
+
             </TextInput>
             <TouchableOpacity style={styles.currencySelect} onPress={() => {
               openCurrencySelection(false);
             }}>
               <Text>{toCurrency.code}</Text>
             </TouchableOpacity>
-            
+
             {isToCurrencySelected && (
               <View style={styles.dropdownContainer}>
 
@@ -189,7 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginVertical: 8.76,
     marginStart: 19.99,
-    flex:1
+    flex: 1
   },
   inputText2: {
     color: '#155DFC',
@@ -198,7 +192,7 @@ const styles = StyleSheet.create({
     marginVertical: 8.76,
     marginStart: 19.99,
     alignSelf: `stretch`,
-    flex:1
+    flex: 1
   },
   touchButton: {
     backgroundColor: '#155DFC',

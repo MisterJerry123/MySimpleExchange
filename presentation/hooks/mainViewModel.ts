@@ -15,7 +15,7 @@ export function useCurrencyViewModel() {
 
             setState(prevState => ({
                 ...prevState,
-                currencies:result
+                currencies: result
             }))
             console.log("mainviewmodel", result);
 
@@ -35,14 +35,16 @@ export function useCurrencyViewModel() {
             fromCurrency: currency,
             toCurrency: {
                 ...prevState.toCurrency,
-                price: (parseFloat(currency.price) * (prevState.toCurrency.rate / currency.rate))
-                    .toLocaleString('ko-KR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    })
             },
+            toPrice: (parseFloat(prevState.fromPrice) * (prevState.toCurrency.rate / currency.rate))
+                .toLocaleString('ko-KR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+        }
+        )
+        );
 
-        }));
 
     }
     const selectToCurrency = (currency: Currency) => {
@@ -51,11 +53,11 @@ export function useCurrencyViewModel() {
             toCurrency: currency,
             fromCurrency: {
                 ...prevState.fromCurrency,
-                price: (parseFloat(currency.price) * (prevState.fromCurrency.rate) / currency.rate).toLocaleString('ko-KR', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                })
-            }
+            },
+            fromPrice: (parseFloat(prevState.toPrice) * (prevState.fromCurrency.rate) / currency.rate).toLocaleString('ko-KR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })
         }));
     }
 
@@ -65,7 +67,9 @@ export function useCurrencyViewModel() {
         setState(prevState => ({
             ...prevState,
             fromCurrency: prevState.toCurrency,
-            toCurrency: prevState.fromCurrency
+            toCurrency: prevState.fromCurrency,
+            toPrice: prevState.fromPrice,
+            fromPrice: prevState.toPrice
         }));
     };
 
@@ -97,14 +101,31 @@ export function useCurrencyViewModel() {
         }
     };
 
-    // const changeFromPrice = (amount: string) => {
-    //     const { fromCurrency, toCurrency } = state;
-    //     const exchangeRate = toCurrency.rate / fromCurrency.rate;
-    //     setState(prevState => ({
-    //         ...prevState,
-    //         price: parseFloat(amount) * exchangeRate
-    //     }));
-    // }
+    const changeFromPrice = (text: string) => {
+        setState(prevState => ({
+            ...prevState,
+            fromPrice: text,
+            toPrice: (parseFloat(text) * (prevState.toCurrency.rate / prevState.fromCurrency.rate))
+                .toLocaleString('ko-KR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+        }))
+    }
+
+    const changeToPrice = (text: string) => {
+        setState(prevState => ({
+            ...prevState,
+            toPrice: text,
+            fromPrice: (parseFloat(text) * (prevState.fromCurrency.rate / prevState.toCurrency.rate))
+                .toLocaleString('ko-KR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+        }))
+    }
+
+
 
     return {
         ...state,
@@ -113,9 +134,8 @@ export function useCurrencyViewModel() {
         swapCurrencies,
         openCurrencySelection,
         closeCurrencySelection,
-
-
-        //changeFromPrice
+        changeFromPrice,
+        changeToPrice
     };
 
 }
