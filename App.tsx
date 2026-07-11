@@ -1,116 +1,106 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList } from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
-
-// const currencies = [
-//   { code: "USD", rate: 1.1415 },
-//   { code: "EUR", rate: 1.0 },
-//   { code: "KRW", rate: 1747.72 },
-//   { code: "JPY", rate: 185.31 },
-
-// ];
-
-
+import { diContext, exchangeRepository } from './core/di/diContext';
 
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies, changeFromPrice, changeToPrice,toPrice,fromPrice } = useCurrencyViewModel();
-
-
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies, changeFromPrice, changeToPrice, toPrice, fromPrice } = useCurrencyViewModel();
   console.log("currency", currencies)
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
+    <diContext.Provider value={{ exchangeRepository }}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
 
-      <View style={styles.contensContainer}>
+        <View style={styles.contensContainer}>
 
-
-        <View style={styles.headerCard}>
-          <Image
-            source={require('./assets/headerIcon.png')}
-            style={styles.headerIcon}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.headerTitle}>간단한 환율 조회</Text>
-            <Text style={styles.headerSubTitle}>실시간 기준 환율을 확인하세요</Text>
-          </View>
-        </View>
-
-        <View style={styles.startPart}>
-          <Text style={styles.priceSelect}>보내는 금액</Text>
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.inputText} keyboardType="numeric" value={fromPrice} onChangeText={(text) => {
-              changeFromPrice(text);
-            }}>
-            </TextInput>
-
-            <TouchableOpacity style={styles.currencySelect} onPress={() => {
-              openCurrencySelection(true);
-            }}>
-              <Text>{fromCurrency.code}</Text>
-            </TouchableOpacity>
-
-            {isFromCurrencySelected && (
-              <View style={styles.dropdownContainer}>
-
-                <FlatList data={currencies} renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => {
-                    selectFromCurrency({ ...fromCurrency, ...item });
-                    ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
-                    closeCurrencySelection(true);
-                  }}>
-                    <Text>{item.code}</Text>
-                  </TouchableOpacity>
-                )} />
-              </View>
-            )}
-          </View>
-
-
-          <TouchableOpacity style={styles.touchButton} onPress={swapCurrencies}>
+          <View style={styles.headerCard}>
             <Image
-              source={require('./assets/changeIcon.png')}
-              style={styles.changeIcon}
+              source={require('./assets/headerIcon.png')}
+              style={styles.headerIcon}
             />
+            <View style={styles.textContainer}>
+              <Text style={styles.headerTitle}>간단한 환율 조회</Text>
+              <Text style={styles.headerSubTitle}>실시간 기준 환율을 확인하세요</Text>
+            </View>
+          </View>
 
-          </TouchableOpacity>
-        </View>
-        <View style={styles.endPart}>
-          <Text style={styles.priceSelect}> 받는 금액</Text>
-          <View style={styles.inputContainer2}>
+          <View style={styles.startPart}>
+            <Text style={styles.priceSelect}>보내는 금액</Text>
+            <View style={styles.inputContainer}>
+              <TextInput style={styles.inputText} keyboardType="numeric" value={fromPrice} onChangeText={(text) => {
+                changeFromPrice(text);
+              }}>
+              </TextInput>
 
-            <TextInput style={styles.inputText2} keyboardType="numeric" value={toPrice} onChangeText={(text) => {
-              changeToPrice(text) ;
-            }}>
-              
+              <TouchableOpacity style={styles.currencySelect} onPress={() => {
+                openCurrencySelection(true);
+              }}>
+                <Text>{fromCurrency.code}</Text>
+              </TouchableOpacity>
 
-            </TextInput>
-            <TouchableOpacity style={styles.currencySelect} onPress={() => {
-              openCurrencySelection(false);
-            }}>
-              <Text>{toCurrency.code}</Text>
+              {isFromCurrencySelected && (
+                <View style={styles.dropdownContainer}>
+
+                  <FlatList data={currencies} renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => {
+                      selectFromCurrency({ ...fromCurrency, ...item });
+                      ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
+                      closeCurrencySelection(true);
+                    }}>
+                      <Text>{item.code}</Text>
+                    </TouchableOpacity>
+                  )} />
+                </View>
+              )}
+            </View>
+
+
+            <TouchableOpacity style={styles.touchButton} onPress={swapCurrencies}>
+              <Image
+                source={require('./assets/changeIcon.png')}
+                style={styles.changeIcon}
+              />
+
             </TouchableOpacity>
+          </View>
+          <View style={styles.endPart}>
+            <Text style={styles.priceSelect}> 받는 금액</Text>
+            <View style={styles.inputContainer2}>
 
-            {isToCurrencySelected && (
-              <View style={styles.dropdownContainer}>
+              <TextInput style={styles.inputText2} keyboardType="numeric" value={toPrice} onChangeText={(text) => {
+                changeToPrice(text);
+              }}>
 
-                <FlatList data={currencies} renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => {
-                    selectToCurrency({ ...toCurrency, ...item });
-                    ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
-                    closeCurrencySelection(false);
-                  }}>
-                    <Text>{item.code}</Text>
-                  </TouchableOpacity>
-                )} />
-              </View>
-            )}
+
+              </TextInput>
+              <TouchableOpacity style={styles.currencySelect} onPress={() => {
+                openCurrencySelection(false);
+              }}>
+                <Text>{toCurrency.code}</Text>
+              </TouchableOpacity>
+
+              {isToCurrencySelected && (
+                <View style={styles.dropdownContainer}>
+
+                  <FlatList data={currencies} renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => {
+                      selectToCurrency({ ...toCurrency, ...item });
+                      ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
+                      closeCurrencySelection(false);
+                    }}>
+                      <Text>{item.code}</Text>
+                    </TouchableOpacity>
+                  )} />
+                </View>
+              )}
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </diContext.Provider >
   );
 }
 

@@ -7,8 +7,8 @@ export interface DiContext{
     exchangeRepository:ExchangeRepository
 }
 
-const remoteDataSource = new RemoteExchangeDataSourceImpl()
-const exchangeRepository= new ExchangeRepositoryImpl(remoteDataSource)
+export const remoteDataSource = new RemoteExchangeDataSourceImpl()
+export const exchangeRepository= new ExchangeRepositoryImpl(remoteDataSource)
 
 export const diContext = createContext<DiContext>({
     exchangeRepository: exchangeRepository
