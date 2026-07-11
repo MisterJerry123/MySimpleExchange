@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { initialState, MainState } from "./mainState";
 import { Currency } from "../../domain/model/currency";
-import { MockExchangeDataSourceImpl } from "../../data/data_source/mockExchangeDataSourceImpl";
-import { ExchangeRepositoryImpl } from "../../data/repository/exchangeRepositoryImpl";
-import { RemoteExchangeDataSourceImpl } from "../../data/data_source/remoteExchangeDataSourceImpl";
-//const dataSource = new MockExchangeDataSourceImpl();
-const dataSource = new RemoteExchangeDataSourceImpl()
-const repository = new ExchangeRepositoryImpl(dataSource);
-export function useCurrencyViewModel() {
+import { diContext } from "../../core/di/diContext";
 
+
+
+export function useCurrencyViewModel() {
+    const { exchangeRepository } = useContext(diContext)
+    const [state, setState] = useState<MainState>(initialState);
     useEffect(() => {
         const fetchCurrencies = async () => {
-            const result = await repository.getCurrencies()
+            const result = await exchangeRepository.getCurrencies()
 
             setState(prevState => ({
                 ...prevState,
@@ -24,7 +23,7 @@ export function useCurrencyViewModel() {
 
     }, [])
 
-    const [state, setState] = useState<MainState>(initialState);
+
 
 
     const selectFromCurrency = (currency: Currency) => {
