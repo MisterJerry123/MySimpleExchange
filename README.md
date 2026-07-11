@@ -41,25 +41,33 @@
 - **통화 스왑** — 보내는/받는 통화를 원형 버튼으로 즉시 교환
 - **통화 드롭다운 선택** — 보내는/받는 통화를 FlatList 기반 드롭다운에서 선택
 - **실시간 API 연동** — Frankfurter API에서 실시간 환율 데이터 조회 (axios)
+- **의존성 주입 (DI)** — React Context API를 활용한 관심사 분리 및 객체 수명 주기 제어
 - **카드형 레이아웃** — 라운드 카드 디자인으로 깔끔한 UI 구성
 - **헤더 카드** — 아이콘과 함께 앱 타이틀 및 설명을 표시하는 블루 컬러 헤더
 
 ---
 
-Clean Architecture 기반으로 **Domain / Data / Presentation** 레이어를 분리하고 공통 모듈인 **Core**를 둡니다.
+Clean Architecture 기반으로 **Domain / Data / Presentation** 레이어를 분리하고 공통 모듈 및 DI 계층을 담당하는 **Core**를 둡니다.
 
 ```
-App.tsx (View) ──(fromPrice, toPrice)──> mainViewModel (ViewModel/Hook) ──> Repository ──> DataSource
-                      ↕                                                         ↕
-               MainState (UiState)                                        Mapper (DTO → Domain)
-                      ↕
-               Currency (Domain Model)
+                  [ App.tsx (View) ]
+                           │ (Provider 공급)
+                     [ diContext ]
+                           │ (useContext 주입)
+                   [ mainViewModel ] ──(fromPrice, toPrice)──> UI 상태 변환
+                           │ (의존성 결합 제거)
+                           ▼
+                  [ exchangeRepository ] (Domain Interface)
+                           │
+                  [ exchangeRepositoryImpl ] (Data Concrete)
+                           │
+                  [ remoteExchangeDataSourceImpl ] (API)
 ```
 
 - **Domain** — 프레임워크 의존 없는 순수 TypeScript (모델, Repository 인터페이스)
 - **Data** — Repository 구현체, DataSource, DTO, Mapper
 - **Presentation** — React Hook 기반 ViewModel + 상태 관리
-- **Core** — 공통 상수(BASE_URL 등) 및 전역 모듈
+- **Core** — 공통 상수(BASE_URL) 및 의존성 주입(diContext) 컨테이너 계층
 
 ---
 
@@ -70,7 +78,9 @@ SimpleExchange/
 ├── App.tsx                          # 메인 화면 (View)
 ├── index.ts                         # 앱 엔트리 포인트
 ├── core/
-│   └── constants.ts                 # 공통 상숫값 정의 (BASE_URL 등)
+│   ├── constants.ts                 # 공통 상숫값 정의 (BASE_URL 등)
+│   └── di/
+│       └── diContext.ts             # React Context 기반 DI 컨테이너 (의존성 제공)
 ├── domain/
 │   ├── model/
 │   │   └── currency.ts              # 통화 도메인 모델 (code, rate)
