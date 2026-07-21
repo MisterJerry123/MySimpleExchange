@@ -102,13 +102,16 @@ SimpleExchange/
 │       ├── mainState.ts             # MainState 인터페이스 + 초기값 (fromPrice, toPrice 포함)
 │       └── mainViewModel.ts         # ViewModel Hook (상태 관리 + 데이터 fetch + 입력 계산)
 ├── __tests__/                       # 단위 테스트 폴더
-│   └── data/
-│       ├── data_source/
-│       │   └── remoteDataSourceImpl.test.ts  # DataSource 테스트 (Axios Mocking)
-│       ├── mapper/
-│       │   └── exchangeInfoMapper.test.ts    # Mapper 테스트 (순수 변환 검증)
-│       └── repository/
-│           └── exchangeRepositoryImpl.test.ts # Repository 테스트 (의존성 연동 검증)
+│   ├── data/
+│   │   ├── data_source/
+│   │   │   └── remoteDataSourceImpl.test.ts  # DataSource 테스트 (Axios Mocking)
+│   │   ├── mapper/
+│   │   │   └── exchangeInfoMapper.test.ts    # Mapper 테스트 (순수 변환 검증)
+│   │   └── repository/
+│   │       └── exchangeRepositoryImpl.test.ts # Repository 테스트 (의존성 연동 검증)
+│   └── presentation/
+│       └── hooks/
+│           └── mainViewModel.test.ts         # ViewModel 테스트 (React Hooks Testing Library)
 ├── assets/
 │   ├── icon.png                     # 앱 아이콘
 │   ├── splash-icon.png              # 스플래시 아이콘
@@ -170,9 +173,10 @@ npm test
 
 | 테스트 대상 | 검증 목적 | 테스트 방식 |
 |:---|:---|:---|
-| **Mapper** (`exchangeInfoMapper`) | DTO 구조가 도메인 배열 구조로 정확히 가공 및 변환되는가? | 순수 함수 입력값 대비 결과값 일치 검증 |
+| **Mapper** (`exchangeInfoMapper`) | DTO 구조가 ExchangeInfo 도메인 구조로 정확히 가공 및 변환되는가? | 순수 함수 입력값 대비 결과값 일치 검증 |
 | **Repository** (`exchangeRepositoryImpl`) | DataSource를 경유하여 Mapper를 결합하는 비즈니스 파이프라인이 정상적으로 동작하는가? | DataSource Mocking을 통한 연동 검증 및 동작 회수 검증 |
 | **DataSource** (`remoteExchangeDataSourceImpl`) | API Endpoint 통신 시 파라미터가 정확히 전달되며, 통신 에러 상황 시 상위로 예외가 전파되는가? | Axios 모듈 Mocking 및 rejects.toThrow() 검증 |
+| **ViewModel** (`mainViewModel`) | 통화 스왑 및 금액 입력 시 UI 상태(MainState)가 올바르게 업데이트되는가? | React Hooks Testing Library 및 Context Provider Wrapper 연동 검증 |
 
 ---
 
