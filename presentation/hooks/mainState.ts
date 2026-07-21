@@ -2,6 +2,7 @@ import { Currency } from "../../domain/model/currency";
 
 
 export interface MainState {
+    baseDate:string
     fromCurrency: Currency;
     toCurrency: Currency;
     isFromCurrencySelected?: boolean;
@@ -12,6 +13,7 @@ export interface MainState {
 }
 
 export const initialState: MainState = { //mock 데이터가 들어있음.
+    baseDate:"test",
     fromCurrency: {
         code: "USD",
         rate: 1.1448,

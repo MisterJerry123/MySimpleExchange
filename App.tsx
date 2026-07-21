@@ -6,7 +6,7 @@ import { diContext, exchangeRepository } from './core/di/diContext';
 export default function App() {
 
   //viewmodel
-  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies, changeFromPrice, changeToPrice, toPrice, fromPrice } = useCurrencyViewModel();
+  const { fromCurrency, toCurrency, selectFromCurrency, selectToCurrency, swapCurrencies, openCurrencySelection, closeCurrencySelection, isFromCurrencySelected, isToCurrencySelected, currencies, changeFromPrice, changeToPrice, toPrice, fromPrice, baseDate } = useCurrencyViewModel();
   console.log("currency", currencies)
 
   return (
@@ -24,6 +24,7 @@ export default function App() {
             <View style={styles.textContainer}>
               <Text style={styles.headerTitle}>간단한 환율 조회</Text>
               <Text style={styles.headerSubTitle}>실시간 기준 환율을 확인하세요</Text>
+              <Text style={styles.headerCurrencyDateTitle}>기준환율일자 : {baseDate}</Text>
             </View>
           </View>
 
@@ -45,12 +46,12 @@ export default function App() {
                 <View style={styles.dropdownContainer}>
 
                   <FlatList data={currencies} renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={styles.dropdownItem} onPress={() => {
                       selectFromCurrency({ ...fromCurrency, ...item });
                       ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
                       closeCurrencySelection(true);
                     }}>
-                      <Text>{item.code}</Text>
+                      <Text style={styles.dropdownText}>{item.code}</Text>
                     </TouchableOpacity>
                   )} />
                 </View>
@@ -86,7 +87,7 @@ export default function App() {
                 <View style={styles.dropdownContainer}>
 
                   <FlatList data={currencies} renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={styles.dropdownItem} onPress={() => {
                       selectToCurrency({ ...toCurrency, ...item });
                       ToastAndroid.show(`선택한 통화: ${item.code}`, ToastAndroid.SHORT);
                       closeCurrencySelection(false);
@@ -136,6 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: `center`,
     color: '#DBEAFE',
+  },
+  headerCurrencyDateTitle: {
+    fontSize: 18,
+    textAlign: `center`,
+    color: '#fff',
     marginBottom: 23.99
   },
   headerIcon: {
@@ -232,7 +238,9 @@ const styles = StyleSheet.create({
     maxHeight: 160,
     zIndex: 999,
     elevation: 4,
-    overflow: 'hidden'
+    overflow: 'hidden',
+
+
   },
   dropdownItem: {
     paddingVertical: 10,
@@ -243,6 +251,7 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 14,
     color: '#333',
-    fontWeight: '500'
+    fontWeight: '500',
+    fontStyle: 'italic'
   },
 });

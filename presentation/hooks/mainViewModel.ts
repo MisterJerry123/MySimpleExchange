@@ -14,7 +14,8 @@ export function useCurrencyViewModel() {
 
             setState(prevState => ({
                 ...prevState,
-                currencies: result
+                currencies: result.currencies,
+                baseDate: result.baseDate
             }))
             console.log("mainviewmodel", result);
 
