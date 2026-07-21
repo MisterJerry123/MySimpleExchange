@@ -1,8 +1,8 @@
 import { ExchangeInfoDto } from "../../../data/dto/exchangeInfoDto"
-import { convertDto2CurrencyList } from "../../../data/mapper/exchangeInfoMapper"
+import { convertDto2ExchangeInfo } from "../../../data/mapper/exchangeInfoMapper"
 
 describe("ExchangeInfoMapper 단위 테스트", () => {
-    test("DTO의 rates객체를 Currency 배열로 올바르게 변환해야 한다.", () => {
+    test("ExchangeInfoDto객체를 ExchangeInfo 객체로 올바르게 변환해야 한다.", () => {
         //given
         const mockDto: ExchangeInfoDto = {
             amount: 1.0,
@@ -15,10 +15,11 @@ describe("ExchangeInfoMapper 단위 테스트", () => {
             }
         }
         //when
-        const result = convertDto2CurrencyList(mockDto)
+        const result = convertDto2ExchangeInfo(mockDto)
 
         //then
-        expect(3).toBe (result.length)
+        expect(3).toBe (result.currencies.length)
+        expect("2026-07-07").toBe(result.baseDate)
 
     })
 })

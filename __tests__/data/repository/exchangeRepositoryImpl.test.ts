@@ -4,7 +4,7 @@ import { ExchangeRepositoryImpl } from "../../../data/repository/exchangeReposit
 import { ExchangeRepository } from "../../../domain/repository/exchangeRepository"
 
 describe("ExchangeRepositoryImpl 단위 테스트", () => {
-    test("getCurrencies는 DataSource로부터 DTO를 성공적으로 받아와 Currency 도메인 배열로 올바르게 반환해야 한다", async () => {
+    test("getCurrencies는 DataSource로부터 DTO를 성공적으로 받아와 ExchangeInfoDto 객체로 올바르게 반환해야 한다", async () => {
         //given
         const mockDto: ExchangeInfoDto = {
             amount: 1.0,
@@ -26,9 +26,7 @@ describe("ExchangeRepositoryImpl 단위 테스트", () => {
         const result = await mockRepository.getCurrencies()
         
         //then
-        expect(result.length).toBe(3)
-
-
+        expect(result.currencies.length).toBe(3)
     })
 
 })

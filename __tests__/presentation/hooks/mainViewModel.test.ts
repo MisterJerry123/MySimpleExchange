@@ -2,19 +2,24 @@ import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react-native";
 import { useCurrencyViewModel } from "../../../presentation/hooks/mainViewModel";
 import { diContext } from "../../../core/di/diContext";
-import { Currency } from "../../../domain/model/currency";
 import { ExchangeRepository } from "../../../domain/repository/exchangeRepository";
+import { ExchangeInfo } from "../../../domain/model/exchangeInfo";
 
 describe("mainViewModel 유닛 테스트", () => {
-    const mockCurrencies: Currency[] = [
-        { code: "USD", rate: 1.0 },
-        { code: "KRW", rate: 1300.0 }
-    ];
+    const mockExchangeInfo: ExchangeInfo = {
+        baseDate: "2026-07-21",
+        currencies: [
+            { code: "USD", rate: 1.0 },
+            { code: "KRW", rate: 1300.0 }
+        ]
+    }
+
+
 
     const mockExchangeRepository: ExchangeRepository = {
-        getCurrencies: jest.fn().mockResolvedValue(mockCurrencies)
+        getCurrencies: jest.fn().mockResolvedValue(mockExchangeInfo)
     };
-    const wrapper = ({ children }: { children: React.ReactNode }) => 
+    const wrapper = ({ children }: { children: React.ReactNode }) =>
         React.createElement(diContext.Provider, { value: { exchangeRepository: mockExchangeRepository } }, children);
 
     test("swapCurrencies를 하면 보내는 부분과 받는 부분의 금액과 통화가 서로 바뀌어야 한다.", async () => {
@@ -26,11 +31,11 @@ describe("mainViewModel 유닛 테스트", () => {
         });
 
         await act(async () => {
-            result.current.selectFromCurrency(mockCurrencies[0]);
+            result.current.selectFromCurrency(mockExchangeInfo.currencies[0]);
         });
 
         await act(async () => {
-            result.current.selectToCurrency(mockCurrencies[1]);
+            result.current.selectToCurrency(mockExchangeInfo.currencies[1]);
         });
 
         await act(async () => {
