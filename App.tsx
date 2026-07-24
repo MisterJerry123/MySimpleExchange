@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ToastAndroid, FlatList, Pressable } from 'react-native';
 import { useCurrencyViewModel } from './presentation/hooks/mainViewModel';
 import { diContext, exchangeRepository } from './core/di/diContext';
 
@@ -42,7 +42,8 @@ export default function App() {
                 <Text>{fromCurrency.code}</Text>
               </TouchableOpacity>
 
-              {isFromCurrencySelected && (
+              {isFromCurrencySelected && (<>
+                <Pressable style={styles.backdrop} onPress={() => closeCurrencySelection(true)} />
                 <View style={styles.dropdownContainer}>
 
                   <FlatList data={currencies} renderItem={({ item }) => (
@@ -55,6 +56,7 @@ export default function App() {
                     </TouchableOpacity>
                   )} />
                 </View>
+              </>
               )}
             </View>
 
@@ -83,7 +85,9 @@ export default function App() {
                 <Text>{toCurrency.code}</Text>
               </TouchableOpacity>
 
-              {isToCurrencySelected && (
+              {isToCurrencySelected && (<>
+
+                <Pressable style={styles.backdrop} onPress={() => closeCurrencySelection(false)} />
                 <View style={styles.dropdownContainer}>
 
                   <FlatList data={currencies} renderItem={({ item }) => (
@@ -96,6 +100,7 @@ export default function App() {
                     </TouchableOpacity>
                   )} />
                 </View>
+              </>
               )}
             </View>
           </View>
@@ -253,5 +258,14 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '500',
     fontStyle: 'italic'
+  },
+  backdrop: {
+    position: 'absolute',
+    top: -1000,
+    bottom: -1000,
+    left: -1000,
+    right: -1000,
+    zIndex: 998,                    // 기존 dropdownContainer(zIndex: 999)보다 뒤에 위치                              
+    backgroundColor: 'transparent', // 투명 배경                                                                      
   },
 });
